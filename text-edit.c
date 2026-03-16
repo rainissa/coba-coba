@@ -36,7 +36,9 @@ void tampilkan()
     printf("2. Hapus baris\n");
     printf("3. Edit Baris\n");
     printf("4. Sisip Baris\n");
-    printf("5. Keluar\n");
+    printf("5. Save File\n");
+    printf("6. Open File\n");
+    printf("7. Keluar\n");
     printf("---------------------------------\n");
 }
 
@@ -123,29 +125,4 @@ void sisipBaris()
     buffer[posisi-1][strcspn(buffer[posisi-1], "\n")] = 0;
 
     jumlahBaris = jumlahBaris + 1;
-}
-
-int main()
-{
-    int pilih;
-
-    do
-	{
-        tampilkan();
-
-        printf("Pilih menu: ");
-        scanf("%d", &pilih);
-		getchar();
-		
-        switch(pilih)
-		{
-            case 1: tambahBaris(); break;
-            case 2: hapusBaris(); break;
-            case 3: editBaris(); break;
-            case 4: sisipBaris(); break;
-        }
-
-    }while(pilih != 5);
-
-    return 0;
 }
