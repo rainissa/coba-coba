@@ -16,14 +16,14 @@ int cursor = 0;
 /* sinkronisasi buffer text-edit ke dokumen clipboard */
 void syncBufferToDokumen() {
     for(int i = 0; i < jumlahBaris; i++){
-        strcpy(dokumen[i], buffer[i]);
+        strcpy(buffer[i], buffer[i]);
     }
 }
 
 /* sinkronisasi dokumen clipboard ke buffer text-edit */
 void syncDokumenToBuffer() {
     for(int i = 0; i < jumlahBaris; i++){
-        strcpy(buffer[i], dokumen[i]);
+        strcpy(buffer[i],buffer[i]);
     }
 }
 
