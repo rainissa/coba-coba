@@ -58,68 +58,96 @@ int main() {
 
         switch (pilihan) {
 
-            case 1:
+            case 1:{
                 tambahBaris();
                 break;
+            }
 
-            case 2:
+            case 2:{
                 hapusBaris();
                 break;
+            }
 
-            case 3:
+            case 3:{
                 editBaris();
                 break;
+            }
 
-            case 4:
+            case 4:{
                 sisipBaris();
                 break;
+            }
 
-            case 5:
+            case 5:{
                 saveFile();
                 break;
+            }
 
-            case 6:
+            case 6:{
                 openFile();
                 break;
+            }
 
-            case 7:
-                copyLine();
+            case 7:{
+                int start, end;
+                printf("Masukkan baris awal: ");
+                scanf("%d", &start);
+                printf("Masukkan baris akhir: ");
+                scanf("%d", &end);
+                getchar();
+
+                copyBlock(start, end);
                 printf(">> Copy berhasil\n");
                 break;
+            }
 
-            case 8:
-                cutLine();
+            case 8:{
+                int start, end;
+                printf("Masukkan baris awal: ");
+                scanf("%d", &start);
+                printf("Masukkan baris akhir: ");
+                scanf("%d", &end);
+                getchar();
+
+                cutBlock(start, end);
                 printf(">> Cut berhasil\n");
                 break;
+            }
 
-            case 9:
-                pasteLine();
+            case 9:{
+                pasteBlock();
                 printf(">> Paste berhasil\n");
                 break;
+            }
 
-            case 10:
+            case 10:{
                 undo();
                 printf(">> Undo berhasil\n");
                 break;
+            }
 
-            case 11:
+            case 11:{
                 redo();
                 printf(">> Redo berhasil\n");
                 break;
+            }
 
-            case 12:
+            case 12:{
                 printf("Masukkan posisi cursor: ");
                 scanf("%d", &pos);
                 getchar();
                 setCursor(pos);
                 break;
+            }
 
-            case 13:
+            case 13:{
                 printf("Keluar...\n");
                 return 0;
+            }
 
-            default:
+            default:{
                 printf("Menu tidak valid!\n");
+            }
         }
 
         pauseScreen();

@@ -2,6 +2,9 @@
 #include <string.h>
 #include "clipboard.h"
 
+char clipboard[MAX_CLIPBOARD_ROW][MAX_KARAKTER];
+int jumlahClipboard = 0;
+
 /* mengatur cursor */
 void setCursor(int posisi){
     if (posisi >= 0 && posisi < jumlahBaris){
@@ -69,7 +72,7 @@ void pasteBlock(){
         return;
     }
 
-    for (int i = jumlahBaris - 1; i > cursor; i--){
+    for (int i = jumlahBaris - 1; i >= cursor; i--){
         strcpy(buffer[i + jumlahClipboard], buffer[i]);
     }
 
