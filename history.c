@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "undo.h"
 #include "cursor.h"
+#include "text-edit.h"
 
-extern char text[MAX_ROW][MAX_COL];
 Action undoStack[STACK_SIZE];
 int top = -1;
 
@@ -25,7 +25,7 @@ void undo(){
         Action last = undoStack[top];
         top--;
 
-        text[last.row][last.col] = last.prev_char;
+        buffer[last.row][last.col] = last.prev_char;
 
         cursor_row = last.row;
         cursor_col = last.col;
