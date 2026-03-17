@@ -1,4 +1,5 @@
 #include <stdio.h>
+<<<<<<< HEAD
 #include <string.h>
 #include "history.h"
 #include "cursor.h"
@@ -7,6 +8,11 @@
 // Variabel buffer global dari text-edit.c
 extern char buffer[MAX_ROW][MAX_COL];
 extern int jumlahBaris;
+=======
+#include "cursor.h"
+#include "history.h"
+#include "text-edit.h"
+>>>>>>> f5416eac6ce18fc94290e32d0a8fe0c1b8d491fd
 
 Action undoStack[STACK_SIZE];
 int undoTop = -1;

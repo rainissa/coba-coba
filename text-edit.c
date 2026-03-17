@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include "text-edit.h"
 
-#define MAX_BARIS 100
+#define MAX_ROW 100
 #define MAX_KARAKTER 200
 
-char buffer[MAX_BARIS][MAX_KARAKTER];
+char buffer[MAX_ROW][MAX_KARAKTER];
 int jumlahBaris = 0;
 int i;
 
@@ -44,7 +44,7 @@ void tampilkan()
 
 void tambahBaris()
 {
-    if(jumlahBaris >= MAX_BARIS)
+    if(jumlahBaris >= MAX_ROW)
 	{
         printf("Buffer penuh!\n");
         pauseScreen();

@@ -9,8 +9,8 @@
 #include "open-save.h"
 
 /* variabel global untuk clipboard */
-char dokumen[MAX_BARIS][MAX_KARAKTER];
-char clipboard[MAX_KARAKTER];
+char dokumen[MAX_ROW][MAX_COL];
+char clipboard[MAX_COL];
 int cursor = 0;
 
 /* sinkronisasi buffer text-edit ke dokumen clipboard */
