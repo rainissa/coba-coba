@@ -5,11 +5,11 @@
 
 typedef struct{
     int row;
-    int col;
+    int karakter;
     char prev_char;
 } Action;
 
-void pushUndo(int row, int col, char c);
+void pushUndo(int row, int karakter, char c);
 void undo();
 
 #endif

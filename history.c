@@ -6,13 +6,13 @@
 Action undoStack[STACK_SIZE];
 int top = -1;
 
-void pushUndo(int row, int col, char c){
+void pushUndo(int row, int karakter, char c){
 
     if(top < STACK_SIZE-1){
 
         top++;
         undoStack[top].row = row;
-        undoStack[top].col = col;
+        undoStack[top].karakter = karakter;
         undoStack[top].prev_char = c;
 
     }
@@ -25,10 +25,10 @@ void undo(){
         Action last = undoStack[top];
         top--;
 
-        buffer[last.row][last.col] = last.prev_char;
+        buffer[last.row][last.karakter] = last.prev_char;
 
         cursor_row = last.row;
-        cursor_col = last.col;
+        cursor_karakter = last.karakter;
 
     }
     else{
