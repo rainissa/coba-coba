@@ -2,13 +2,13 @@
 #include <string.h>
 #include "clipboard.h"
 
-/* mengatur posisi cursor */
+/* mengatur cursor */
 void setCursor(int posisi)
 {
     if (posisi >= 0 && posisi < jumlahBaris)
     {
         cursor = posisi;
-        printf("Cursor berpindah ke baris %d\n", cursor);
+        printf("Cursor di baris %d\n", cursor);
     }
     else
     {
@@ -16,9 +16,7 @@ void setCursor(int posisi)
     }
 }
 
-/* INPUT TEKS
-   Jika panjang baris penuh maka otomatis pindah baris
-*/
+/* input teks dengan auto pindah baris */
 void inputText(char teks[])
 {
     int i = 0;
@@ -27,7 +25,6 @@ void inputText(char teks[])
     {
         int panjang = strlen(dokumen[cursor]);
 
-        /* jika baris sudah penuh */
         if (panjang >= MAX_KARAKTER - 1)
         {
             if (jumlahBaris >= MAX_BARIS - 1)
@@ -42,6 +39,7 @@ void inputText(char teks[])
         }
 
         int pos = strlen(dokumen[cursor]);
+
         dokumen[cursor][pos] = teks[i];
         dokumen[cursor][pos + 1] = '\0';
 
@@ -49,70 +47,81 @@ void inputText(char teks[])
     }
 }
 
-/* COPY
-   hanya menyalin baris ke clipboard
-*/
-void copyLine()
+/* COPY BLOK BARIS */
+void copyBlock(int start, int end)
 {
-    if (jumlahBaris == 0)
+    if (start < 0 || end >= jumlahBaris || start > end)
     {
-        printf("Dokumen kosong\n");
+        printf("Range tidak valid\n");
         return;
     }
 
-    strcpy(clipboard, dokumen[cursor]);
+    jumlahClipboard = 0;
 
-    printf("Baris berhasil dicopy\n");
+    for (int i = start; i <= end; i++)
+    {
+        if (jumlahClipboard >= MAX_CLIPBOARD_BARIS)
+        {
+            printf("Clipboard penuh\n");
+            break;
+        }
+
+        strcpy(clipboard[jumlahClipboard], dokumen[i]);
+        jumlahClipboard++;
+    }
+
+    printf("Blok baris berhasil dicopy\n");
 }
 
-/* CUT
-   menyalin ke clipboard lalu menghapus dari dokumen
-*/
-void cutLine()
+/* CUT BLOK BARIS */
+void cutBlock(int start, int end)
 {
-    if (jumlahBaris == 0)
+    if (start < 0 || end >= jumlahBaris || start > end)
     {
-        printf("Dokumen kosong\n");
+        printf("Range tidak valid\n");
         return;
     }
 
-    strcpy(clipboard, dokumen[cursor]);
+    copyBlock(start, end);
 
-    for (int i = cursor; i < jumlahBaris - 1; i++)
+    int jumlahHapus = end - start + 1;
+
+    for (int i = start; i < jumlahBaris - jumlahHapus; i++)
     {
-        strcpy(dokumen[i], dokumen[i + 1]);
+        strcpy(dokumen[i], dokumen[i + jumlahHapus]);
     }
 
-    jumlahBaris--;
+    jumlahBaris -= jumlahHapus;
 
-    printf("Baris dipotong ke clipboard\n");
+    printf("Blok baris dipotong\n");
 }
 
-/* PASTE
-   menempelkan clipboard di bawah cursor
-*/
-void pasteLine()
+/* PASTE BLOK */
+void pasteBlock()
 {
-    if (strlen(clipboard) == 0)
+    if (jumlahClipboard == 0)
     {
         printf("Clipboard kosong\n");
         return;
     }
 
-    if (jumlahBaris >= MAX_BARIS)
+    if (jumlahBaris + jumlahClipboard >= MAX_BARIS)
     {
         printf("Dokumen penuh\n");
         return;
     }
 
-    for (int i = jumlahBaris; i > cursor + 1; i--)
+    for (int i = jumlahBaris - 1; i > cursor; i--)
     {
-        strcpy(dokumen[i], dokumen[i - 1]);
+        strcpy(dokumen[i + jumlahClipboard], dokumen[i]);
     }
 
-    strcpy(dokumen[cursor + 1], clipboard);
+    for (int i = 0; i < jumlahClipboard; i++)
+    {
+        strcpy(dokumen[cursor + 1 + i], clipboard[i]);
+    }
 
-    jumlahBaris++;
+    jumlahBaris += jumlahClipboard;
 
-    printf("Clipboard ditempel di bawah cursor\n");
+    printf("Clipboard berhasil ditempel\n");
 }

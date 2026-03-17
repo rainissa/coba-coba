@@ -1,24 +1,30 @@
 #ifndef CLIPBOARD_H
-#define CLIPBOARD_H
+    #define CLIPBOARD_H
 
-#define MAX_BARIS 100
-#define MAX_KARAKTER 256
+    #define MAX_BARIS 100
+    #define MAX_KARAKTER 256
+    #define MAX_CLIPBOARD_BARIS 20
 
-/* variabel global dokumen */
-extern char dokumen[MAX_BARIS][MAX_KARAKTER];
-extern char clipboard[MAX_KARAKTER];
-extern int jumlahBaris;
-extern int cursor;
+/* dokumen utama */
+    extern char dokumen[MAX_BARIS][MAX_KARAKTER];
+    extern int jumlahBaris;
 
-/* pengaturan cursor */
-void setCursor(int posisi);
+/* clipboard multi baris */
+    extern char clipboard[MAX_CLIPBOARD_BARIS][MAX_KARAKTER];
+    extern int jumlahClipboard;
 
-/* input teks dengan auto pindah baris */
-void inputText(char teks[]);
+/* cursor */
+    extern int cursor;
+
+/* fungsi cursor */
+    void setCursor(int posisi);
+
+/* input teks */
+    void inputText(char teks[]);
 
 /* operasi clipboard */
-void copyLine();
-void cutLine();
-void pasteLine();
+    void copyBlock(int start, int end);
+    void cutBlock(int start, int end);
+    void pasteBlock();
 
 #endif
