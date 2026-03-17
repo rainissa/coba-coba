@@ -15,22 +15,22 @@ int redoTop = -1;
 
 void pushUndo(int row, int karakter, char c){
 
-    if(top < STACK_SIZE-1){
+    if(undoTop < STACK_SIZE-1){
 
-        top++;
-        undoStack[top].row = row;
-        undoStack[top].karakter = karakter;
-        undoStack[top].prev_char = c;
+        undoTop++;
+        undoStack[undoTop].row = row;
+        undoStack[undoTop].karakter = karakter;
+        undoStack[undoTop].prev_char = c;
 
     }
 }
 
 void undo(){
 
-    if(top >= 0){
+    if(undoTop >= 0){
 
-        Action last = undoStack[top];
-        top--;
+        Action last = undoStack[undoTop];
+        undoTop--;
 
         buffer[last.row][last.karakter] = last.prev_char;
 
