@@ -1,37 +1,70 @@
 #include <stdio.h>
-#include "undo.h"
+#include <string.h>
+#include "history.h"
 #include "cursor.h"
 #include "text-edit.h"
 
+// Variabel buffer global dari text-edit.c
+extern char buffer[MAX_ROW][MAX_COL];
+extern int jumlahBaris;
+
 Action undoStack[STACK_SIZE];
-int top = -1;
+int undoTop = -1;
 
-void pushUndo(int row, int col, char c){
+Action redoStack[STACK_SIZE];
+int redoTop = -1;
 
-    if(top < STACK_SIZE-1){
-
-        top++;
-        undoStack[top].row = row;
-        undoStack[top].col = col;
-        undoStack[top].prev_char = c;
-
+void pushUndo(int row, char *teks, ActionType tipe) {
+    if (undoTop < STACK_SIZE - 1) {
+        undoTop++;
+        undoStack[undoTop].row = row;
+        undoStack[undoTop].tipe = tipe;
+        // Salin teks dari Array 2D ke memori Stack
+        strcpy(undoStack[undoTop].dataLama, teks);
     }
 }
 
-void undo(){
+void clearRedo() {
+    redoTop = -1;
+}
 
-    if(top >= 0){
+void undo() {
+    if (undoTop >= 0) {
+        Action last = undoStack[undoTop];
+        undoTop--;
 
-        Action last = undoStack[top];
-        top--;
+        // Simpan kondisi sekarang ke Redo sebelum dikembalikan
+        // Implementasi Redo
 
-        buffer[last.row][last.col] = last.prev_char;
+        switch(last.tipe) {
+            case EDIT:
+                // Timpa baris di Array 2D dengan data lama dari Stack
+                strcpy(buffer[last.row], last.dataLama);
+                break;
+            
+            case TAMBAH:
+                // Kebalikan tambah adalah hapus baris terakhir
+                jumlahBaris--;
+                break;
 
-        cursor_row = last.row;
-        cursor_col = last.col;
+            case HAPUS:
+                // Kebalikan hapus adalah menggeser baris ke bawah (Insert)
+                for (int i = jumlahBaris; i > last.row; i--) {
+                    strcpy(buffer[i], buffer[i-1]);
+                }
+                strcpy(buffer[last.row], last.dataLama);
+                jumlahBaris++;
+                break;
+        }
 
+        // Pindahkan kursor ke lokasi kejadian agar user tahu apa yang berubah
+        cursor = last.row;
+        printf("Undo berhasil.\n");
+    } else {
+        printf("Tidak ada yang bisa di-undo.\n");
     }
-    else{
-        printf("Undo stack kosong\n");
-    }
+}
+
+void redo() {
+    
 }
