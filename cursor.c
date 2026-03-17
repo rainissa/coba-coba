@@ -1,24 +1,26 @@
 #include "cursor.h"
+#include "text-edit.h"
 
-int cursor_row = 0;
-int cursor_col = 0;
+// Inisialisasi: kursor mulai dari baris paling atas (indeks 0)
+int cursor = 0;
 
-void moveLeft() {
-    if (cursor_col > 0)
-        cursor_col--;
+int isCursorValid() {
+    return (cursor >= 0 && cursor < jumlahBaris);
 }
 
-void moveRight() {
-    if (cursor_col < MAX_COL - 1)
-        cursor_col++;
-}
+// Navigasi ke baris sebelumnya. Mencegah cursor menjadi negatif (di bawah 0).
 
 void moveUp() {
-    if (cursor_row > 0)
-        cursor_row--;
+    if (cursor > 0) {
+        cursor--;
+    }
 }
 
+// Navigasi ke baris berikutnya. Membatasi kursor agar tidak melewati jumlah baris yang ada di Array 2D.
+
 void moveDown() {
-    if (cursor_row < MAX_ROW - 1)
-        cursor_row++;
+    // jumlahBaris adalah total baris yang sudah terisi di buffer
+    if (cursor < jumlahBaris - 1) {
+        cursor++;
+    }
 }
