@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include "undo.h"
 #include "cursor.h"
+#include "history.h"
+#include "text-edit.h"
 
 extern char text[MAX_ROW][MAX_COL];
 Action undoStack[STACK_SIZE];

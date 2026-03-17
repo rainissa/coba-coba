@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-#include "buffer.h"
 #include "open-save.h"
+#include "text-edit.h"
 
 int cekTxt(char namaFile[])
 {
@@ -49,7 +49,7 @@ void openFile()
     {
         buffer[jumlahBaris][strcspn(buffer[jumlahBaris], "\n")] = '\0';
         jumlahBaris++;
-        if(jumlahBaris >= MAX_BARIS)
+        if(jumlahBaris >= MAX_ROW)
         {
             break;
         }
