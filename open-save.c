@@ -2,6 +2,7 @@
 #include <string.h>
 #include "text-edit.h"
 #include "open-save.h"
+#include "text-edit.h"
 
 // Mengecek apakah file berekstensi .txt
 int cekTxt(char namaFile[])
@@ -50,7 +51,7 @@ void openFile()
     {
         buffer[jumlahBaris][strcspn(buffer[jumlahBaris], "\n")] = '\0';
         jumlahBaris++;
-        if(jumlahBaris >= MAX_BARIS)
+        if(jumlahBaris >= MAX_ROW)
         {
             break;
         }

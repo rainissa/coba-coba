@@ -1,10 +1,10 @@
 #ifndef TEXT_EDIT_H
 #define TEXT_EDIT_H
 
-#define MAX_BARIS 100
+#define MAX_ROW 100
 #define MAX_KARAKTER 200
 
-extern char buffer[MAX_BARIS][MAX_KARAKTER];
+extern char buffer[MAX_ROW][MAX_KARAKTER];
 extern int jumlahBaris;
 
 void clearScreen();
