@@ -33,11 +33,6 @@ void tampilkanMenu() {
     printf("==========================\n");
 }
 
-void pauseScreen() {
-    printf("\nTekan ENTER untuk lanjut...");
-    getchar();
-}
-
 int main() {
     int pilihan;
     int pos;
@@ -136,7 +131,7 @@ int main() {
                 printf("Masukkan posisi cursor: ");
                 scanf("%d", &pos);
                 getchar();
-                setCursor(pos);
+                setCursor(pos, 0);
                 break;
             }
 
