@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "text-edit.h"
+#include "cursor.h"
+#include "history.h"
 
 #define MAX_ROW 100
 #define MAX_KARAKTER 200
@@ -51,10 +53,16 @@ void tambahBaris()
         return;
     }
 
+    pushSnapshot();
+    clearRedo();
+
     printf("Masukkan teks: "); 
     fgets(buffer[jumlahBaris], MAX_KARAKTER, stdin);
 
     buffer[jumlahBaris][strcspn(buffer[jumlahBaris], "\n")] = 0;
+
+    cursor_row = jumlahBaris;  // update cursor di baris baru
+    cursor_col = 0;
 
     jumlahBaris = jumlahBaris + 1;
 }
@@ -74,12 +82,19 @@ void hapusBaris()
         return;
     }
 
+    pushSnapshot();
+    clearRedo();
+
     for(i = hpsBariske-1; i < jumlahBaris-1; i++)
 	{
         strcpy(buffer[i], buffer[i+1]);
     }
 
     jumlahBaris = jumlahBaris - 1;
+
+    if (cursor_row >= jumlahBaris) cursor_row = jumlahBaris - 1;
+    if (cursor_row < 0) cursor_row = 0;
+    cursor_col = 0;
 }
 
 void editBaris()
@@ -95,10 +110,16 @@ void editBaris()
         return;
     }
 
+    pushSnapshot();
+    clearRedo();
+
     printf("Masukkan teks pengganti: ");
     fgets(buffer[nomor-1], MAX_KARAKTER, stdin);
 
     buffer[nomor-1][strcspn(buffer[nomor-1], "\n")] = 0;
+
+    cursor_row = nomor - 1;
+    cursor_col = 0;
 }
 
 void sisipBaris()
@@ -114,6 +135,9 @@ void sisipBaris()
         return;
     }
 
+    pushSnapshot();
+    clearRedo();
+
     for(i = jumlahBaris; i >= posisi; i--){
         strcpy(buffer[i], buffer[i-1]);
     }
@@ -123,6 +147,9 @@ void sisipBaris()
     fgets(buffer[posisi-1], MAX_KARAKTER, stdin);
 
     buffer[posisi-1][strcspn(buffer[posisi-1], "\n")] = 0;
+
+    cursor_row = posisi - 1;
+    cursor_col = 0;
 
     jumlahBaris = jumlahBaris + 1;
 }
