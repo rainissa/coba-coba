@@ -4,109 +4,78 @@
 #include "cursor.h"
 #include "history.h"
 
-char clipboard[MAX_CLIPBOARD_ROW][MAX_KARAKTER];
-int jumlahClipboard = 0;
+char clipboard[MAX_KARAKTER];
 
-/* COPY BLOK BARIS */
-void copyBlock(int start, int end){
-    if (start < 0 || end >= jumlahBaris || start > end){
-        printf("Range tidak valid\n");
-
+void copyLine(){
+    if (jumlahBaris == 0){
+        printf("Dokumen kosong\n");
         return;
     }
 
-    jumlahClipboard = 0;
-
-    for (int i = start; i <= end; i++){
-        if (jumlahClipboard >= MAX_CLIPBOARD_ROW){
-            printf("Clipboard penuh\n");
-
-            break;
-        }
-
-        strcpy(clipboard[jumlahClipboard], buffer[i]);
-        jumlahClipboard++;
-    }
-
-    printf("Blok baris berhasil dicopy\n");
-}
-
-/* CUT BLOK BARIS */
-void cutBlock(int start, int end){
-    if (!isCursorValid()) {
+    if (!isCursorValid()){
         printf("Cursor tidak valid\n");
         return;
     }
 
-    if (start < 0 || end >= jumlahBaris || start > end){
-        printf("Range tidak valid\n");
+    int len = strlen(buffer[cursor_row]);
+    if (cursor_col > len) cursor_col = len;
+
+    strcpy(clipboard, buffer[cursor_row] + cursor_col);
+
+    printf("Copy berhasil\n");
+}
+
+void cutLine(){
+    if (jumlahBaris == 0){
+        printf("Dokumen kosong\n");
+        return;
+    }
+
+    if (!isCursorValid()){
+        printf("Cursor tidak valid\n");
         return;
     }
 
     pushSnapshot();
     clearRedo();
 
-    copyBlock(start, end);
+    int len = strlen(buffer[cursor_row]);
+    if (cursor_col > len) cursor_col = len;
 
-    int jumlahHapus = end - start + 1;
+    strcpy(clipboard, buffer[cursor_row] + cursor_col);
 
-    for (int i = start; i < jumlahBaris - jumlahHapus; i++){
-        strcpy(buffer[i], buffer[i + jumlahHapus]);
-    }
+    buffer[cursor_row][cursor_col] = '\0';
 
-    jumlahBaris -= jumlahHapus;
-
-      // update cursor
-    if (cursor_row >= jumlahBaris) cursor_row = jumlahBaris - 1;
-    if (cursor_row < 0) cursor_row = 0;
-    if (cursor_col > strlen(buffer[cursor_row])) cursor_col = strlen(buffer[cursor_row]);
-
-    printf("Blok baris dipotong\n");
+    printf("Cut berhasil\n");
 }
 
-/* PASTE BLOK */
-void pasteBlock(){
-    if (jumlahClipboard == 0){
+void pasteLine(){
+    if (strlen(clipboard) == 0){
         printf("Clipboard kosong\n");
         return;
     }
 
-        if (!isCursorValid()) {           
+    if (!isCursorValid()){
         printf("Cursor tidak valid\n");
-        return;
-    }
-
-    if (jumlahBaris + jumlahClipboard >= MAX_ROW){
-        printf("Dokumen penuh\n");
         return;
     }
 
     pushSnapshot();
     clearRedo();
 
-    // simpan sisa kanan baris cursor
     char temp[MAX_KARAKTER];
+
+    int len = strlen(buffer[cursor_row]);
+    if (cursor_col > len) cursor_col = len;
+
     strcpy(temp, buffer[cursor_row] + cursor_col);
+
     buffer[cursor_row][cursor_col] = '\0';
 
-    // geser baris di bawah cursor untuk memberi ruang
-    for (int i = jumlahBaris - 1; i > cursor_row; i--) {
-        strcpy(buffer[i + jumlahClipboard], buffer[i]);
-    }
+    strcat(buffer[cursor_row], clipboard);
+    strcat(buffer[cursor_row], temp);
 
-    // sisipkan baris clipboard
-    for (int i = 0; i < jumlahClipboard; i++) {
-        strcpy(buffer[cursor_row + 1 + i], clipboard[i]);
-    }
+    cursor_col += strlen(clipboard);
 
-    // gabungkan sisa kanan ke baris terakhir dari clipboard
-    strcat(buffer[cursor_row + jumlahClipboard], temp);
-
-    jumlahBaris += jumlahClipboard;
-
-    // update cursor di akhir blok yang ditempel
-    cursor_row = cursor_row + jumlahClipboard;
-    cursor_col = 0;
-
-    printf("Clipboard berhasil ditempel\n");
+    printf("Paste berhasil\n");
 }

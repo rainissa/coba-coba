@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "text-edit.h"
 #include "clipboard.h"
@@ -21,8 +22,8 @@ void tampilkanMenu() {
     printf("4. Sisip Baris\n");
     printf("5. Save File\n");
     printf("6. Open File\n");
-    printf("7. Copy (cursor)\n");
-    printf("8. Cut (cursor)\n");
+    printf("7. Copy\n");
+    printf("8. Cut\n");
     printf("9. Paste\n");
     printf("10. Undo\n");
     printf("11. Redo\n");
@@ -43,7 +44,7 @@ int main() {
         printf("\n=== ISI DOKUMEN ===\n");
         tampilkan();  // nanti diperbaiki supaya ada cursor
 
-        printf("\nCursor di baris: %d\n", cursor_row);
+        printf("\nCursor di baris: %d, kolom: %d\n", cursor_row, cursor_col);
 
         tampilkanMenu();
 
@@ -57,26 +58,48 @@ int main() {
 
         switch (pilihan) {
 
-            case 1: tambahBaris(); break;
-            case 2: hapusBaris(); break;
-            case 3: editBaris(); break;
-            case 4: sisipBaris(); break;
-            case 5: saveFile(); break;
-            case 6: openFile(); break;
+            case 1: 
+                tambahBaris(); 
+                break;
+
+            case 2: 
+                hapusBaris(); 
+                break;
+
+            case 3: 
+                editBaris(); 
+                break;
+
+            case 4: 
+                sisipBaris(); 
+                break;
+
+            case 5: 
+                saveFile(); 
+                break;
+
+            case 6: 
+                openFile(); 
+                break;
 
             case 7:
-                copyLine(cursor_row);
-                printf(">> Copy berhasil\n");
-                break;
+                if (jumlahBaris == 0){
+                    printf("Dokumen kosong!\n");
+                } else {
+                    copyLine();
+                    printf(">> Copy berhasil\n");
+                } break;
 
             case 8:
-                cutLine(cursor_row);
-                printf(">> Cut berhasil\n");
-                break;
+                if (jumlahBaris == 0){
+                printf("Dokumen kosong!\n");
+                } else {
+                    cutLine();
+                    printf(">> Cut berhasil\n");
+                } break;
 
             case 9:
-                pasteLine(cursor_row);
-                printf(">> Paste berhasil\n");
+                pasteLine();
                 break;
 
             case 10:
@@ -90,15 +113,32 @@ int main() {
                 break;
 
             case 12:
-                printf("Masukkan posisi cursor: ");
+                if (jumlahBaris == 0){
+                    printf("Dokumen masih kosong!\n");
+                    break;
+                }
+
+                printf("Masukkan baris cursor: ");
                 scanf("%d", &pos);
                 getchar();
 
-                if (pos >= 0 && pos < jumlahBaris)
-                    setCursor(pos, 0);
-                else
+                if (pos >= 0 && pos < jumlahBaris){
+                    int col;
+
+                    printf("Masukkan kolom cursor: ");
+                    scanf("%d", &col);
+                    getchar();
+
+                    int len = strlen(buffer[pos]);
+
+                    if (col < 0) col = 0;
+                    if (col > len) col = len;
+
+                    setCursor(pos, col);
+                }
+                else {
                     printf("Posisi tidak valid!\n");
-                break;
+                } break;
 
             case 13:
                 return 0;
